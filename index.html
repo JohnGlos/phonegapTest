@@ -96,13 +96,90 @@
       alert('Failed because: ' + message);
     }
 
+
+
+
+    // Called when capture operation is finished
+    //
+    function captureSuccess(mediaFiles) {
+        var i, len;
+        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+            uploadFile(mediaFiles[i]);
+        }       
+    }
+
+    // Called if something bad happens.
+    // 
+    function captureError(error) {
+        var msg = 'An error occurred during capture: ' + error.code;
+        navigator.notification.alert(msg, null, 'Uh oh!');
+    }
+
+    // A button will call this function
+    //
+    function captureAudio() {
+        // Launch device audio recording application, 
+        // allowing user to capture up to 2 audio clips
+        navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 2});
+    }
+
+    // Upload files to server
+    function uploadFile(mediaFile) {
+        var ft = new FileTransfer(),
+            path = mediaFile.fullPath,
+            name = mediaFile.name;
+
+        ft.upload(path,
+            "http://my.domain.com/upload.php",
+            function(result) {
+                console.log('Upload success: ' + result.responseCode);
+                console.log(result.bytesSent + ' bytes sent');
+            },
+            function(error) {
+                console.log('Error uploading file ' + path + ': ' + error.code);
+            },
+            { fileName: name });   
+    }
+
+
+
+
+    // Wait for Cordova to load
+    //
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    // Cordova is ready
+    //
+    function onDeviceReady() {
+        // Empty
+    }
+
+    // alert dialog dismissed
+    function alertDismissed() {
+        // do something
+    }
+
+    // Show a custom alertDismissed
+    //
+    function showAlert() {
+        navigator.notification.alert(
+            'You are the winner!',  // message
+            alertDismissed,         // callback
+            'Game Over',            // title
+            'Done'                  // buttonName
+        );
+    }
+
     </script>
   </head>
   <body>
   	<div data-role="page" id="home">
   		<h1>Phone Gap Test</h1>
   		<a href="#cameraPage" data-role="button">Camera</a>
+  		<a href="#audioPage" data-role="button">Audio</a>
+  		<a href="#notificationsPage" data-role="button">Notifications</a>
   	</div>
+
   	<div data-role="page" id="cameraPage">
 		<button onclick="capturePhoto();">Capture Photo</button> <br>
 		<button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
@@ -110,6 +187,18 @@
 		<button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
 		<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
 		<img style="display:none;" id="largeImage" src="" />
+	</div>
+
+	<div data-role="page" id="audioPage">
+		<button onclick="captureAudio();">Capture Audio</button> <br>
+	</div>
+
+	<div data-role="page" id="notificationsPage">
+		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
+	</div>
+
+
+	<div data-role="page" id="template">
 	</div>
   </body>
 </html>
