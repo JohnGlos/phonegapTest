@@ -170,6 +170,18 @@
         );
     }
 
+    var timeoutVar;
+
+
+    function showAlertDelay() {
+        navigator.notification.alert(
+            'You are the winner!',  // message
+            alertDismissed,         // callback
+            'Game Over',            // title
+            'Done'                  // buttonName
+        );
+    }
+
     </script>
   </head>
   <body>
@@ -194,7 +206,9 @@
 	</div>
 
 	<div data-role="page" id="notificationsPage">
-		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
+		<p><a href="#" onclick="showAlert(); return false;">Show PG Alert</a></p>
+		<p><a href="#" onclick="timeoutVar = setTimeout(showAlertDelay,5000);">Show PG Delayed Alert (5 secs)</a></p>
+		<p><a href="#" onclick="alert('Normal Alert');">Show Normal Alert</a></p>
 	</div>
 
 
