@@ -625,6 +625,7 @@
     }
 
     function fail2(evt) {
+    	alert('Error');
         alert(evt.target.error.code);
     }
 
@@ -636,12 +637,14 @@
     }
 
 	function gotFS3(fileSystem) {
-		alert('FileSystem: ' + fileSystem + '/n fileSystem.root: ' + fileSystem.root);
+		alert('FileSystem: ' + getObjProp(fileSystem) + ' fileSystem.root: ' + getObjProp(fileSystem.root));
 
-		fileSystem.root.getDirectory("sdcard/My Documents/My Recordings", null, gotDir, fail2);
+		fileSystem.root.getDirectory("My Documents/My Recordings", null, gotDir, fail2);
 	}
 
 	function gotDir(fileSystem){
+		alert('at gotDir()');
+
 		alert('FileSystem: ' + fileSystem + '/n fileSystem.root: ' + fileSystem.root + '/n fileSystem.name: ' + fileSystem.name + '/n fileSystem.fullPath: ' + fileSystem.fullPath);
 		
 		// Get a directory reader
@@ -652,6 +655,8 @@
 	}
 
 	function dirReadSuccess(entries) {
+		alert('in dirReadSuccess()');
+
 		var i;
 		for (i=0; i<entries.length; i++) {
 			alert(entries[i].name);
@@ -660,6 +665,26 @@
 
 	function dirReadFail(error) {
 		alert("Failed to list directory contents: " + error.code);
+	}
+
+
+
+	function getObjProp(object){
+		for (i = 0, len = object.length; i < len; i += 1) {
+            var details;
+            var fieldContents;
+
+            for (var field in object) {
+              fieldContents = object[field];
+              if (typeof(fieldContents) == "function") {
+                fieldContents = "(function)";
+              }
+              details += "  " + field + ": " + fieldContents + "\n";
+            }
+        }
+        
+        return details;
+
 	}
 
     </script>
@@ -789,6 +814,10 @@
         Your browser does not support the audio element. 
     </audio><audio controls="controls"> 
           <source src="file:///sdcard/Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
+        Your browser does not support the audio element. 
+    </audio>
+    </audio><audio controls="controls"> 
+          <source src="file:///Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
         Your browser does not support the audio element. 
     </audio>
     <audio controls="controls"> 
