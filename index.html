@@ -98,7 +98,7 @@
         var imageValue = localStorage.getItem(imageArray[i]);
         
         //Construct the image layer code
-        outputImages = outputImages + '<div class="noteImage"><img src="' + imageValue + '" /><div class="removeNoteImage" title="Delete image" onclick="removeNoteImage(\'' + imageName + '\')">&#10006;</div></div><br/>';
+        outputImages = outputImages + '<div class="noteImage"><img src="' + imageValue + '" style="width: 100%;" /><div class="removeNoteImage" title="Delete image" onclick="removeNoteImage(\'' + imageName + '\')">&#10006;</div></div><br/>';
       }
 
       //If there are more than 6 images in the local storage, becuase they take upo a lot of space, the user is warned that it may cause problems if they add more.
@@ -309,7 +309,8 @@
 
       if((!checkInput("date") && String(message).length < 1 )|| String(message).length < 1){
         var d = new Date();
-        var todaysDate = d.getFullYear() + '-' + addLeadingZero(d.getMonth()-1) + '-' + addLeadingZero(d.getDate());
+        console.log(d.getMonth());
+        var todaysDate = d.getFullYear() + '-' + addLeadingZero(d.getMonth()+1) + '-' + addLeadingZero(d.getDate());
 
         $('#notificationDate').val(todaysDate);
       }
@@ -547,6 +548,8 @@
       #noteImageGallery .noteImage{
       display: inline-block;
       position: relative;
+      width: 60%;
+      margin-left: 20%;
       margin-bottom: 25px;
       padding: 10px;
       padding-bottom: 2px;
