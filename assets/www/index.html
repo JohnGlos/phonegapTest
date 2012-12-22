@@ -280,7 +280,7 @@
         //If the current time is greater than the time set for the notification to go off
         if(nowTimestring > parseInt(notiTime)){
           removeNotification(notiKey); //Deletes the notification from the local storage
-          //alert(notiMessage); //Show the notification message in an alert box
+          alert('(JS Alert) ' + notiMessage); //Show the notification message in an alert box
           
           /*
           navigator.notification.alert(
