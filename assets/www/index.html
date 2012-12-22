@@ -555,6 +555,87 @@
         document.getElementById('audio_position').innerHTML = position;
     }
 
+
+
+
+
+
+
+
+    function writeToFile() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
+    }
+
+    function gotFS(fileSystem) {
+    	alert('creating file in ' + fileSystem.root.name)
+        fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry, fail);
+    }
+
+    function gotFileEntry(fileEntry) {
+        fileEntry.createWriter(gotFileWriter, fail);
+    }
+
+    function gotFileWriter(writer) {
+        writer.onwriteend = function(evt) {
+            alert("contents of file now 'some sample text'");
+            writer.truncate(11);  
+            writer.onwriteend = function(evt) {
+               alert("contents of file now 'some sample'");
+                writer.seek(4);
+                writer.write(" different text");
+                writer.onwriteend = function(evt){
+                    alert("contents of file now 'some different text'");
+                }
+            };
+        };
+        writer.write("some sample text");
+    }
+
+    function fail(error) {
+        alert(error.code);
+    }
+
+
+
+    function readFile() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS2, fail2);
+    }
+
+    function gotFS2(fileSystem) {
+        fileSystem.root.getFile("readme.txt", null, gotFileEntry2, fail2);
+    }
+
+    function gotFileEntry2(fileEntry) {
+        fileEntry.file(gotFile, fail2);
+    }
+
+    function gotFile(file){
+        readDataUrl(file);
+        readAsText(file);
+    }
+
+    function readDataUrl(file) {
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+            alert("Read as data URL");
+            alert(evt.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function readAsText(file) {
+        var reader = new FileReader();
+        reader.onloadend = function(evt) {
+            alert("Read as text");
+            alert(evt.target.result);
+        };
+        reader.readAsText(file);
+    }
+
+    function fail2(evt) {
+        alert(evt.target.error.code);
+    }
+
     </script>
     <style type="text/css">
       /* --- Notifications start --- */
@@ -660,6 +741,7 @@
   		<a href="#cameraPage" data-role="button">Camera</a>
   		<a href="#audioPage" data-role="button">Audio</a>
   		<a href="#notificationsPage" data-role="button">Notifications</a>
+  		<a href="#filePage" data-role="button">Files</a>
   	</div>
 
   	<div data-role="page" id="cameraPage">
@@ -702,11 +784,15 @@
       <label for="notificationTime">Time</label>
       <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
     <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
-    <div id="setNotifications">
-      
-    </div>
+	    <div id="setNotifications">
+	      
+	    </div>
 	</div>
 
+	<div data-role="page" id="filePage">
+		<p><a href="#" onclick="writeToFile()">Write to File</a></p>
+		<p><a href="#" onclick="readFile()">Read File</a></p>
+	</div>
 
 	<div data-role="page" id="template">
 	</div>
