@@ -73,7 +73,7 @@
       
       nextNoteNumber = parseInt(nextNoteNumber) + 1; //Converts the string to a number (integer) adds 1. This number is used alongside the "img" string to make the key for the image data
       
-      localStorage.setItem('img' + nextNoteNumber, base64); //Adds the encoded image string to the local storage
+      localStorage.setItem('img' + nextNoteNumber, smallImage); //Adds the encoded image string to the local storage
 
 
       refreshNoteGallery(); //Refreshed the image gallery layer to show the newly added image from the local storage
@@ -270,17 +270,57 @@
         if(nowTimestring > parseInt(notiTime)){
           removeNotification(notiKey); //Deletes the notification from the local storage
           //alert(notiMessage); //Show the notification message in an alert box
-          console.log(notiMessage);
           
           navigator.notification.alert(
-            'SoC Mobile',  // message
-            notiMessage,   // title
-            'Done'         // buttonName
+            notiMessage,     // message
+            'SoC Mobile',    // title
+            'SoC Mobile'     // buttonName
           );
           navigator.notification.beep(1);
           navigator.notification.vibrate(1000);
 
         }
+      }
+    }
+
+
+
+
+
+    function checkInput(type) {
+      var input = document.createElement("input");
+      input.setAttribute("type", type);
+      return input.type == type;
+    }
+
+    function addLeadingZero(setNumber){
+      if(String(setNumber).length == 1 && setNumber < 10){
+        return 0 + String(setNumber);
+      }
+      else{
+        return setNumber;
+      }
+    }
+
+    function notificationDateFocus(){
+      var message = $('#notificationDate').val();
+
+      if(!checkInput("date") && String(message).length < 1){
+        var d = new Date();
+        var todaysDate = d.getFullYear() + '-' + addLeadingZero(d.getMonth()-1) + '-' + addLeadingZero(d.getDate());
+
+        $('#notificationDate').val(todaysDate);
+      }
+    }
+
+    function notificationTimeFocus(){
+      var message = $('#notificationTime').val();
+
+      if(!checkInput("date") && String(message).length < 1){
+        var d = new Date();
+        var todaysTime = addLeadingZero(d.getHours()) + ':' + addLeadingZero(d.getMinutes());
+
+        $('#notificationTime').val(todaysTime);
       }
     }
 
@@ -563,9 +603,9 @@
 	    <input type="text" id="notificationText" placeholder="Notification message"/>
       <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
       <label for="notificationDate">Date</label>
-      <input type="date" id="notificationDate" placeholder="YYYY-MM-DD"/>
+      <input type="date" id="notificationDate" placeholder="YYYY-MM-DD" onfocus="notificationDateFocus()"/>
       <label for="notificationTime">Time</label>
-      <input type="time" id="notificationTime" placeholder="HH:MM"/>
+      <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
     <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
     <div id="setNotifications">
       
