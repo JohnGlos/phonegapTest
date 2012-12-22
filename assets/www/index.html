@@ -578,15 +578,6 @@
     function gotFileWriter(writer) {
         writer.onwriteend = function(evt) {
             alert("contents of file now 'some sample text'");
-            writer.truncate(11);  
-            writer.onwriteend = function(evt) {
-               alert("contents of file now 'some sample'");
-                writer.seek(4);
-                writer.write(" different text");
-                writer.onwriteend = function(evt){
-                    alert("contents of file now 'some different text'");
-                }
-            };
         };
         writer.write("some sample text");
     }
@@ -594,6 +585,7 @@
     function fail(error) {
         alert(error.code);
     }
+
 
 
 
@@ -635,6 +627,40 @@
     function fail2(evt) {
         alert(evt.target.error.code);
     }
+
+
+
+
+    function accessRecordings(){
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
+    }
+
+	function gotFS3(fileSystem) {
+		alert('FileSystem: ' + fileSystem + '/n fileSystem.root: ' + fileSystem.root);
+
+		fileSystem.root.getDirectory("sdcard/My Documents/My Recordings", null, gotDir, fail2);
+	}
+
+	function gotDir(fileSystem){
+		alert('FileSystem: ' + fileSystem + '/n fileSystem.root: ' + fileSystem.root + '/n fileSystem.name: ' + fileSystem.name + '/n fileSystem.fullPath: ' + fileSystem.fullPath);
+		
+		// Get a directory reader
+		var directoryReader = fileSystem.createReader();
+
+		// Get a list of all the entries in the directory
+		directoryReader.readEntries(dirReadSuccess,dirReadFail);
+	}
+
+	function dirReadSuccess(entries) {
+		var i;
+		for (i=0; i<entries.length; i++) {
+			alert(entries[i].name);
+		}
+	}
+
+	function dirReadFail(error) {
+		alert("Failed to list directory contents: " + error.code);
+	}
 
     </script>
     <style type="text/css">
@@ -759,7 +785,7 @@
 		<button onclick="recordAudio();">Record Audio</button> <br>
     <p id="audio_position"></p>
     <audio controls="controls"> 
-          <source src="file:///mnt/sdcard/Music/Whoel Lotta Love.mp3.mp3" type="audio/mpeg"/> 
+          <source src="file:///mnt/sdcard/Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
         Your browser does not support the audio element. 
     </audio>
     <audio controls="controls"> 
@@ -792,6 +818,7 @@
 	<div data-role="page" id="filePage">
 		<p><a href="#" onclick="writeToFile()">Write to File</a></p>
 		<p><a href="#" onclick="readFile()">Read File</a></p>
+		<p><a href="#" onclick="accessRecordings()">Access Recordings Folder</a></p>
 	</div>
 
 	<div data-role="page" id="template">
