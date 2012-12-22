@@ -8,7 +8,6 @@
     <script src="script/jquery.mobile-1.2.0.min.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
-    <script type="text/javascript" charset="utf-8" src="statusbarnotification.js"></script>
 
     <script type="text/javascript" charset="utf-8">
     $('[data-role=page]').live('pagebeforeshow', function(){
@@ -280,9 +279,13 @@
         //If the current time is greater than the time set for the notification to go off
         if(nowTimestring > parseInt(notiTime)){
           removeNotification(notiKey); //Deletes the notification from the local storage
-          alert('(JS Alert) ' + notiMessage); //Show the notification message in an alert box
-          
-          /*
+          //alert('(JS Alert) ' + notiMessage); //Show the notification message in an alert box
+
+          //https://github.com/phonegap/phonegap-plugins/tree/master/Android/StatusBarNotification
+          //https://github.com/saileshmittal/phonegap-system-notification-plugin
+          //http://manijshrestha.wordpress.com/2012/11/23/implementing-android-status-bar-notification-in-phonegapcordova-app/
+          //https://github.com/purplecabbage/phonegap-plugins/tree/master/Android/StatusBarNotification
+
           navigator.notification.alert(
             notiMessage,     // message
             'SoC Mobile',    // title
@@ -290,10 +293,6 @@
           );
           navigator.notification.beep(1);
           navigator.notification.vibrate(1000);
-          */
-
-          window.plugins.statusBarNotification.notify("SoC Mobile", notiMessage);
-
         }
       }
     }
@@ -483,6 +482,52 @@
       else{return 'th';}
     }
 
+
+
+
+
+
+
+    // Record audio
+    // 
+    function recordAudio() {
+        var src = "myrecording.amr";
+        var mediaRec = new Media(src, onSuccess, onError);
+
+        // Record audio
+        mediaRec.startRecord();
+
+        // Stop recording after 10 sec
+        var recTime = 0;
+        var recInterval = setInterval(function() {
+            recTime = recTime + 1;
+            setAudioPosition(recTime + " sec");
+            if (recTime >= 10) {
+                clearInterval(recInterval);
+                mediaRec.stopRecord();
+            }
+        }, 1000);
+    }
+
+    // onSuccess Callback
+    //
+    function onSuccess() {
+        console.log("recordAudio():Audio Success");
+    }
+
+    // onError Callback 
+    //
+    function onError(error) {
+        alert('code: '    + error.code    + '\n' + 
+              'message: ' + error.message + '\n');
+    }
+
+    // Set audio position
+    // 
+    function setAudioPosition(position) {
+        document.getElementById('audio_position').innerHTML = position;
+    }
+
     </script>
     <style type="text/css">
       /* --- Notifications start --- */
@@ -601,7 +646,9 @@
 	</div>
 
 	<div data-role="page" id="audioPage">
-		<button onclick="captureAudio();">Capture Audio</button> <br>
+    <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
+		<button onclick="recordAudio();">Capture Audio</button> <br>
+    <p id="audio_position"></p>
 	</div>
 
 	<div data-role="page" id="notificationsPage">
