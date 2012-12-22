@@ -245,54 +245,7 @@
     }
 
 
-    function playRecordedSound(){
-      var src = 'file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr';
-      if (my_media == null) {
-          // Create Media object from src
-          my_media = new Media(src, onSuccess2, onError2);
-      } // else play current audio
-      // Play audio
-      my_media.play();
 
-      // Update my_media position every second
-      if (mediaTimer == null) {
-          mediaTimer = setInterval(function() {
-              // get my_media position
-              my_media.getCurrentPosition(
-                  // success callback
-                  function(position) {
-                      if (position > -1) {
-                          setAudioPosition((position) + " sec");
-                      }
-                  },
-                  // error callback
-                  function(e) {
-                      alert("Error getting pos=" + e);
-                      setAudioPosition("Error: " + e);
-                  }
-              );
-          }, 1000);
-      }
-    }
-
-        // onSuccess2 Callback
-        //
-        function onSuccess2() {
-            console.log("playAudio():Audio Success");
-        }
-
-        // onError2 Callback 
-        //
-        function onError2(error) {
-            alert('code: '    + error.code    + '\n' + 
-                  'message: ' + error.message + '\n');
-        }
-
-        // Set audio position
-        // 
-        function setAudioPosition(position) {
-            document.getElementById('audio_position').innerHTML = position;
-        }
 
 
 
@@ -722,9 +675,19 @@
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
 		<button onclick="recordAudio();">Record Audio</button> <br>
-    <p id="audio_position"></p><br/>
-    <button onclick="playRecordedSound();">Record Audio</button> <br>
-
+    <p id="audio_position"></p>
+    <audio controls="controls"> 
+          <source src="file:///sdcard/Music/Whoel Lotta Love.mp3.mp3" type="audio/mpeg"/> 
+        Your browser does not support the audio element. 
+    </audio>
+    <audio controls="controls"> 
+          <source src="file:///sdcard/My Documents/My Recordings/Voice0006.amr"/> 
+        Your browser does not support the audio element. 
+    </audio> 
+    <audio controls="controls"> 
+          <source src="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
+        Your browser does not support the audio element. 
+    </audio> 
 	</div>
 
 	<div data-role="page" id="notificationsPage">
