@@ -10,6 +10,20 @@
     <script type="text/javascript" charset="utf-8" src="cordova-2.2.0.js"></script>
 
     <script type="text/javascript" charset="utf-8">
+    $('[data-role=page]').live('pagebeforeshow', function(){
+      console.log($(this).attr('id'));
+
+      //Depending what page you are on, run different functions, usually specific to that page
+      switch($(this).attr('id')){
+        case 'notificationsPage':
+          refreshNotifications();
+        break;
+        case 'cameraPage':
+          refreshNoteGallery();
+        break;
+      }
+    });
+
 
     var pictureSource;   // picture source
     var destinationType; // sets the format of returned value 
@@ -43,7 +57,66 @@
       // The inline CSS rules are used to resize the image
       //
       smallImage.src = "data:image/jpeg;base64," + imageData;
+
+      var storageCurrent = localStorage.length; //Gets the amount is key-value pairs in the local storage
+      
+      var nextNoteNumber = -1;
+      
+      //In this for loop, it checks every local storage key the begins with "img", and works out what the next unique number for the next image should be
+      for (var i = 0; i < storageCurrent; i++){
+        if( localStorage.key(i).substring(0, 3) == 'img' ){
+          if(localStorage.key(i).substring(3) > nextNoteNumber){
+            nextNoteNumber = localStorage.key(i).substring(3);
+          }
+        }
+      }
+      
+      nextNoteNumber = parseInt(nextNoteNumber) + 1; //Converts the string to a number (integer) adds 1. This number is used alongside the "img" string to make the key for the image data
+      
+      localStorage.setItem('img' + nextNoteNumber, base64); //Adds the encoded image string to the local storage
+
+
+      refreshNoteGallery(); //Refreshed the image gallery layer to show the newly added image from the local storage
     }
+
+    function refreshNoteGallery(){
+      var imageArray = new Array();
+
+      for (var i = 0; i < localStorage.length; i++){
+        if( localStorage.key(i).substring(0, 3) == 'img' ){
+          imageArray.push(localStorage.key(i)); //Add note value to array
+        }
+      }
+      
+      imageArray.reverse(); //Reverses the order of the array, so the latest image is first
+      var outputImages = '';
+      for(var i = 0; i < imageArray.length; i++){
+        
+        var imageName = imageArray[i];
+        var imageValue = localStorage.getItem(imageArray[i]);
+        
+        //Construct the image layer code
+        outputImages = outputImages + '<div class="noteImage"><img src="' + imageValue + '" /><div class="removeNoteImage" title="Delete image" onclick="removeNoteImage(\'' + imageName + '\')">&#10006;</div></div><br/>';
+      }
+
+      //If there are more than 6 images in the local storage, becuase they take upo a lot of space, the user is warned that it may cause problems if they add more.
+      var limitWarning = '';
+      if(imageArray.length > 6){
+        limitWarning = '<div class="warning">WARNING! Your device\'s local storage may be exceeded soon. Deleting some of the images below is recommended.</div>';
+      }
+      
+      $('#noteImageGallery').html(limitWarning + outputImages); //Outputs all image layers to the gallery layer
+    }
+
+    function removeNoteImage(imageName){
+      localStorage.removeItem(imageName); //Delete the note from local storage
+      refreshNoteGallery();
+    }
+
+
+
+
+
 
     // Called when a photo is successfully retrieved
     //
@@ -95,6 +168,10 @@
     function onFail(message) {
       alert('Failed because: ' + message);
     }
+
+
+
+
 
 
 
@@ -166,9 +243,295 @@
         navigator.notification.vibrate(2000);
     }
 
-    
+
+    var monthsShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    var notificationTimer = setInterval(checkNotifications, 6000); //Every minute ------------------------------------------------------------------------------- 6 seconds?!
+
+    function checkNotifications(){
+      var nowTimestring = new Date().getTime();
+
+      var notiArray = new Array();
+          
+      for (var i = 0; i < localStorage.length; i++){
+        if( localStorage.key(i).substring(0, 4) == 'noti' ){
+          notiArray.push(localStorage.key(i) + '>' + localStorage.getItem(localStorage.key(i))); //Add notification and its key value to array
+        }
+      }
+      
+      for(var i = 0; i < notiArray.length; i++){
+        var notiTextArray = notiArray[i].split('>'); //Splits the notification string up into its name and its value
+        
+        var notiKey = notiTextArray[0];
+        var notiMessage = notiTextArray[1];
+        var notiTime = notiTextArray[2];
+
+        //If the current time is greater than the time set for the notification to go off
+        if(nowTimestring > parseInt(notiTime)){
+          removeNotification(notiKey); //Deletes the notification from the local storage
+          //alert(notiMessage); //Show the notification message in an alert box
+          console.log(notiMessage);
+          
+          navigator.notification.alert(
+            'SoC Mobile',  // message
+            notiMessage,   // title
+            'Done'         // buttonName
+          );
+          navigator.notification.beep(1);
+          navigator.notification.vibrate(1000);
+
+        }
+      }
+    }
+
+
+    //Creates a notification
+    function createNotification(){
+      //Gets the values in the input boxes
+      var notiText = $('#notificationText').val();
+      var notiDate = $('#notificationDate').val();
+      var notiTime = $('#notificationTime').val();
+
+      //If the text and numbers in the input textboxes are valid
+      if(validateCreateNotification('#notificationText', '#notificationDate', '#notificationTime')){
+        var nextNotiNumber = -1;
+        
+        //For every key-value pair in the local storage, it finds every key name that starts with "noti" to work out what the next increment number should be for the next note
+        for (var i = 0; i < localStorage.length; i++){
+          if( localStorage.key(i).substring(0, 4) == 'noti' ){
+            if(localStorage.key(i).substring(4) > nextNotiNumber){
+              nextNotiNumber = localStorage.key(i).substring(4);
+            }
+          }
+        }
+        
+        nextNotiNumber = parseInt(nextNotiNumber) + 1;
+
+        //new Date(year, month, day, hours, minutes, seconds, milliseconds);
+        var timestamp = new Date(notiDate.split('-')[0], notiDate.split('-')[1]-1, notiDate.split('-')[2], notiTime.split(':')[0], notiTime.split(':')[1], 0, 0).getTime();
+
+        notiStorageText = notiText + '>' + timestamp; //Constructs the string that will be put into local storage. It consists of the message and the timestamp, separated by a ">"
+
+        localStorage.setItem('noti' + nextNotiNumber, notiStorageText); //Adds the notifications to local storage
+
+        //Resets the input boxes so they are blank
+        $('#notificationText').val('');
+        $('#notificationDate').val('');
+        $('#notificationTime').val('');
+
+        refreshNotifications();
+      }
+    }
+
+    //Validates the notification inputs
+    function validateCreateNotification(textInput, dateInput, timeInput){
+      var notiText = $(textInput).val();
+      var notiDate = $(dateInput).val();
+      var notiTime = $(timeInput).val();
+      
+      //resets the border colours
+      $(textInput).css({'border-color':'#AAA'});
+      $(dateInput).css({'border-color':'#AAA'});
+      $(timeInput).css({'border-color':'#AAA'});
+
+      $('#notificationTextError').hide(); //Hides the error message
+
+      var errors = 0;
+
+      //Checks for a blank text string
+      if(notiText.length < 1){
+        $(textInput).css({'border-color':'#DD5447'}); //Highlight the invalid input box
+        errors++;
+      }
+
+      //Makes sure at least one character has been inputted and that the string does not include a ">" symbol because that symbol will be used to separate the text from the timestamp when adding the notification to the local storage
+      if(/>/.test(notiText)){
+        $('#notificationTextError').slideDown();
+        $(textInput).css({'border-color':'#DD5447'}); //Highlight the invalid input box
+        errors++;
+      }
+
+      //If the date is blank, not in the correct format or has an invalid month/day number
+      if(!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(notiDate) || notiDate.length != 10 || notiDate.split('-')[1] > 12 || notiDate.split('-')[2] > 31){
+        $(dateInput).css({'border-color':'#DD5447'}); //Highlight the invalid input box
+        errors++;
+      }
+
+      //If the time is not in the correct format, the hours are over 24 or the minutes are over 59
+      if(!/[0-9]{2}:[0-9]{2}/.test(notiTime) || notiTime.length != 5 || notiTime.split(':')[0] > 24 || notiTime.split(':')[1] >= 60){
+        $(timeInput).css({'border-color':'#DD5447'}); //Highlight the invalid input box
+        errors++;
+      }
+
+      if(errors > 0){
+        return false;
+      }
+      else{
+        return true;
+      }
+
+    }
+
+    //Refreshes the notification boxes
+    function refreshNotifications(){
+      checkNotifications(); //Checks every notification for any that are overdue
+
+      var notiArray = new Array();
+          
+      for (var i = 0; i < localStorage.length; i++){
+        if( localStorage.key(i).substring(0, 4) == 'noti' ){
+          notiArray.push(localStorage.key(i) + '>' + localStorage.getItem(localStorage.key(i))); //Add notification and its key value to array
+        }
+      }
+      
+      notiArray.reverse(); //Reverses the order of the array, so the latest notification is first
+      var outputNotifications = '';
+      for(var i = 0; i < notiArray.length; i++){
+        var notiTextArray = notiArray[i].split('>'); //Splits the notification string up into its name and its value
+        
+        var notiKey = notiTextArray[0];
+        var notiMessage = notiTextArray[1];
+        var notiTime = notiTextArray[2];
+
+        //Converts the timestamp into a date object and gets the date elements from that
+        var d = new Date(parseInt(notiTime));
+        var year = d.getFullYear();
+        var month = monthsShort[d.getMonth()];
+        var date = d.getDate();
+        var hour = String(d.getHours());
+        var min = String(d.getMinutes());
+
+        //If the hour of minute is just one character, add a "0" to the start of the number to make it look more like a clock time
+        if(hour.length == 1){
+          hour = String(0) + String(hour);
+        }
+        if(min.length == 1){
+          min = String(0) + String(min);
+        }
+
+        var time = hour + ':' + min + ' - ' + date + dateSuffix(date) + ' ' + month + ' ' + year;
+        
+        outputNotifications = outputNotifications + '<div class="noti"><a onclick="removeNotification(\'' + notiKey + '\')" href="javascript:void(0);" title="Remove notification">&#10006;</a><div class="notiTime">' + time + '</div><p>' + notiMessage + '</p></div>';
+      }
+      
+      if(notiArray.length > 0){
+        $('#setNotifications').html('<h4>Your Set Notifications</h4>' + outputNotifications);
+      }
+      else{
+        $('#setNotifications').html('');
+      }
+    }
+
+    //Deletes the notification from the local storage
+    function removeNotification(storageKey){
+      localStorage.removeItem(storageKey);
+      refreshNotifications();
+    }
+
+    //Calculates the appropriate suffix for a day date number. eg "st" for 21 (21st)
+    function dateSuffix(date){
+      if(date == 1 || date == 21 || date == 31){return 'st';}
+      else if(date == 2 || date == 22){return 'nd';}
+      else if(date == 3 || date == 23){return 'rd';}
+      else{return 'th';}
+    }
 
     </script>
+    <style type="text/css">
+      /* --- Notifications start --- */
+
+      #notificationDate.ui-input-text, #notificationTime.ui-input-text{
+        width: 200px;
+        max-width: 100%;
+        margin-top: 0px;
+      }
+
+      label[for="notificationDate"], label[for="notificationTime"]{
+        margin-bottom: 2px;
+      }
+
+      #notificationTextError{
+        display: none;
+        color: #DD5447;
+      }
+
+      #setNotifications{
+        margin-bottom: 50px;
+      }
+
+      #setNotifications .noti{
+        position: relative;
+        margin-bottom: 20px;
+        padding: 5px;
+        border: 1px solid #85BAFC;
+        border-radius: 4px;
+        background-color: #dcebfe;
+
+        -webkit-box-shadow:  -1px 1px 6px 0px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow:  -1px 1px 6px 0px rgba(0, 0, 0, 0.2);
+        box-shadow:  -1px 1px 6px 0px rgba(0, 0, 0, 0.2);
+      }
+
+      #setNotifications .noti .notiTime{
+        color: #3677E2;
+      }
+
+      #setNotifications .noti p{
+        margin: 0px;
+        font-size: 0.9em;
+      }
+
+      #setNotifications a{
+        display: block;
+        position: absolute;
+        top: 4px;
+        right: 8px;
+        color: #000;
+        opacity: 0.2;
+        text-decoration: none;
+      }
+
+      #setNotifications a:hover{
+        color: #DD5447;
+        opacity: 1;
+      }
+
+      /* --- Notifications end --- */
+
+
+
+     /* --- Picture Notes start --- */
+
+      #noteImageGallery .noteImage{
+      display: inline-block;
+      position: relative;
+      margin-bottom: 25px;
+      padding: 10px;
+      padding-bottom: 2px;
+      border: 1px solid #ddd;
+      background-color: #F8F8F8;
+      border-radius: 9px;
+
+      -webkit-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
+      -moz-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
+      box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
+    }
+
+    #noteImageGallery .noteImage img, #noteImageGallery .noteImage .removeNoteImage{
+      display: block;
+    }
+
+    #noteImageGallery .noteImage .removeNoteImage{
+      text-align: right;
+      cursor: pointer;
+    }
+
+    #noteImageGallery .noteImage .removeNoteImage:hover{
+      color: #DD5447;
+    }
+
+    /* --- Picture Notes end --- */
+    </style>
   </head>
   <body>
   	<div data-role="page" id="home">
@@ -185,6 +548,7 @@
 		<button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
 		<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
 		<img style="display:none;" id="largeImage" src="" />
+    <div id="noteImageGallery"></div>
 	</div>
 
 	<div data-role="page" id="audioPage">
@@ -196,9 +560,16 @@
 	    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
 	    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
 	    <br/>
-	    <p><a href="#" onclick="timer = setTimeout(showAlert, 5000);">Delayed Alert</a></p>
-	    <p><a href="#" onclick="timer = setTimeout(playBeep, 5000);">Delayed Beep</a></p>
-	    <p><a href="#" onclick="timer = setTimeout(vibrate, 5000);">Delayed Vibrate</a></p>
+	    <input type="text" id="notificationText" placeholder="Notification message"/>
+      <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
+      <label for="notificationDate">Date</label>
+      <input type="date" id="notificationDate" placeholder="YYYY-MM-DD"/>
+      <label for="notificationTime">Time</label>
+      <input type="time" id="notificationTime" placeholder="HH:MM"/>
+    <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
+    <div id="setNotifications">
+      
+    </div>
 	</div>
 
 
