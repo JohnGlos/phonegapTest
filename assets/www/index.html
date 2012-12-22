@@ -186,7 +186,23 @@
     //
     function captureSuccess(mediaFiles) {
         var i, len;
+        alert('capture success - Files: ' + mediaFiles.length);
+
         for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+            var details;
+            var fieldContents;
+
+            for (var field in mediaFiles[i]) {
+              fieldContents = mediaFiles[i][field];
+              if (typeof(fieldContents) == "function") {
+                fieldContents = "(function)";
+              }
+              details += "  " + field + ": " + fieldContents + "\n";
+            }
+
+            alert(details);
+
+
             uploadFile(mediaFiles[i]);
         }       
     }
@@ -194,8 +210,8 @@
     // Called if something bad happens.
     // 
     function captureError(error) {
-        var msg = 'An error occurred during capture: ' + error.code;
-        navigator.notification.alert(msg, null, 'Uh oh!');
+        var msg = 'An error occurred during capture (Code ' + error.code + ')';
+        navigator.notification.alert(msg, null, 'Capture error');
     }
 
     // A button will call this function
@@ -203,11 +219,13 @@
     function captureAudio() {
         // Launch device audio recording application, 
         // allowing user to capture up to 2 audio clips
-        navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 2});
+        navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 1});
     }
 
     // Upload files to server
     function uploadFile(mediaFile) {
+        alert('Uploading file');
+
         var ft = new FileTransfer(),
             path = mediaFile.fullPath,
             name = mediaFile.name;
@@ -215,14 +233,19 @@
         ft.upload(path,
             "http://my.domain.com/upload.php",
             function(result) {
-                console.log('Upload success: ' + result.responseCode);
-                console.log(result.bytesSent + ' bytes sent');
+                alert('Upload success: ' + result.responseCode);
+                alert(result.bytesSent + ' bytes sent');
             },
             function(error) {
-                console.log('Error uploading file ' + path + ': ' + error.code);
+                alert('Error uploading file ' + path + ': ' + error.code);
             },
             { fileName: name });   
     }
+
+
+
+
+
 
 
 
@@ -248,6 +271,7 @@
     function vibrate() {
         navigator.notification.vibrate(2000);
     }
+
 
 
 
@@ -488,6 +512,7 @@
 
 
 
+
     // Record audio
     // 
     function recordAudio() {
@@ -512,7 +537,7 @@
     // onSuccess Callback
     //
     function onSuccess() {
-        console.log("recordAudio():Audio Success");
+        alert("recordAudio():Audio Success");
     }
 
     // onError Callback 
@@ -647,7 +672,7 @@
 
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
-		<button onclick="recordAudio();">Capture Audio</button> <br>
+		<button onclick="recordAudio();">Record Audio</button> <br>
     <p id="audio_position"></p>
 	</div>
 
