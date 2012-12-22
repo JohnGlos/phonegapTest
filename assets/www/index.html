@@ -249,41 +249,6 @@
 
 
 
-	function successDir(entries) {
-	    var i;
-	    for (i=0; i<entries.length; i++) {
-	        alert(entries[i].name);
-	    }
-	}
-
-	function failDir(error) {
-	    alert("Failed to list directory contents: " + error.code);
-	}
-
-	// Get a directory reader
-	var directoryReader = dirEntry.createReader();
-
-	// Get a list of all the entries in the directory
-	directoryReader.readEntries(successDir,failDir);
-
-
-	function win(file) {
-	    var reader = new FileReader();
-	    reader.onloadend = function(evt) {
-	        alert("read success");
-	        alert(evt.target.result);
-	    };
-	    reader.readAsDataURL(file);
-	};
-
-	var fail = function(evt) {
-	    alert(error.code);
-	};
-
-	entry.file(win, fail);
-
-
-
 
 
 
@@ -720,7 +685,7 @@
         Your browser does not support the audio element. 
     </audio> 
     <audio controls="controls"> 
-          <source src="file:///mnt/mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
+          <source src="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
         Your browser does not support the audio element. 
     </audio> 
 	</div>
