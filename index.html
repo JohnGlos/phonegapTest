@@ -45,6 +45,7 @@
       // Uncomment to view the base64 encoded image data
       // console.log(imageData);
 
+      /*
       // Get image handle
       //
       var smallImage = document.getElementById('smallImage');
@@ -56,7 +57,8 @@
       // Show the captured photo
       // The inline CSS rules are used to resize the image
       //
-      //smallImage.src = "data:image/jpeg;base64," + imageData;
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+      */
 
       base64 = "data:image/jpeg;base64," + imageData;
 
@@ -148,6 +150,7 @@
         destinationType: destinationType.DATA_URL });
     }
 
+    /*
     // A button will call this function
     //
     function capturePhotoEdit() {
@@ -164,6 +167,7 @@
         destinationType: destinationType.FILE_URI,
         sourceType: source });
     }
+    */
 
     // Called if something bad happens.
     // 
@@ -289,12 +293,6 @@
 
 
 
-    function checkInput(type) {
-      var input = document.createElement("input");
-      input.setAttribute("type", type);
-      return input.type == type;
-    }
-
     function addLeadingZero(setNumber){
       if(String(setNumber).length == 1 && setNumber < 10){
         return 0 + String(setNumber);
@@ -307,7 +305,7 @@
     function notificationDateFocus(){
       var message = $('#notificationDate').val();
 
-      if((!checkInput("date") && String(message).length < 1 )|| String(message).length < 1){
+      if( String(message).length < 1){
         var d = new Date();
         console.log(d.getMonth());
         var todaysDate = d.getFullYear() + '-' + addLeadingZero(d.getMonth()+1) + '-' + addLeadingZero(d.getDate());
@@ -319,7 +317,7 @@
     function notificationTimeFocus(){
       var message = $('#notificationTime').val();
 
-      if((!checkInput("time") && String(message).length < 1 ) || String(message).length < 1){
+      if(String(message).length < 1){
         var d = new Date();
         var todaysTime = addLeadingZero(d.getHours()) + ':' + addLeadingZero(d.getMinutes());
 
