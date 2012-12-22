@@ -56,7 +56,9 @@
       // Show the captured photo
       // The inline CSS rules are used to resize the image
       //
-      smallImage.src = "data:image/jpeg;base64," + imageData;
+      //smallImage.src = "data:image/jpeg;base64," + imageData;
+
+      base64 = "data:image/jpeg;base64," + imageData;
 
       var storageCurrent = localStorage.length; //Gets the amount is key-value pairs in the local storage
       
@@ -73,7 +75,7 @@
       
       nextNoteNumber = parseInt(nextNoteNumber) + 1; //Converts the string to a number (integer) adds 1. This number is used alongside the "img" string to make the key for the image data
       
-      localStorage.setItem('img' + nextNoteNumber, smallImage); //Adds the encoded image string to the local storage
+      localStorage.setItem('img' + nextNoteNumber, base64); //Adds the encoded image string to the local storage
 
 
       refreshNoteGallery(); //Refreshed the image gallery layer to show the newly added image from the local storage
@@ -305,7 +307,7 @@
     function notificationDateFocus(){
       var message = $('#notificationDate').val();
 
-      if(!checkInput("date") && String(message).length < 1){
+      if((!checkInput("date") && String(message).length < 1 )|| String(message).length < 1){
         var d = new Date();
         var todaysDate = d.getFullYear() + '-' + addLeadingZero(d.getMonth()-1) + '-' + addLeadingZero(d.getDate());
 
@@ -316,7 +318,7 @@
     function notificationTimeFocus(){
       var message = $('#notificationTime').val();
 
-      if(!checkInput("date") && String(message).length < 1){
+      if((!checkInput("time") && String(message).length < 1 ) || String(message).length < 1){
         var d = new Date();
         var todaysTime = addLeadingZero(d.getHours()) + ':' + addLeadingZero(d.getMinutes());
 
