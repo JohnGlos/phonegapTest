@@ -259,9 +259,9 @@
 
           fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
             alert('created or in dir');
-            alert('Created and in Dir: ' + fileSystem2.root.name);
+            alert('Created and in Dir: ' + fileSystem2.fullPath);
 
-            var newFolder = fileSystem2.root.name;
+            var newFolder = fileSystem2.fullPath;
             var parentName = newFolder.substring(newFolder.lastIndexOf('/')+1);
             alert('newFolder: ' + newFolder + ' || parentName: ' + parentName)
             var parentEntry = new DirectoryEntry(parentName, newFolder);
