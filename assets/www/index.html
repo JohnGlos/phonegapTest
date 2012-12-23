@@ -772,7 +772,9 @@
 
       $('.audioNote .playControl').each(function(index) {
           $(this).removeClass('stop').addClass('play');
-          $(this).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
+
+          var sameURL = $(this).attr('onclick').substring(15, $(this).attr('onclick').length-2);
+          $(this).attr('onclick', 'playAudioNote(\'' + sameURL + '\', this)');
       });
 
       // Play the audio file at url
