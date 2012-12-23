@@ -246,21 +246,48 @@
     }
     */
 
-    function uploadFile(mediaFile){
+    //This works
+    function uploadFile(audioFile){
       window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-        alert('FileSystem.root.name: ' + fileSystem.root.name);
+        alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root: ' + fileSystem.root + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
-        fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
-          alert('in Dir: ' + fileSystem2.fullPath);
+        alert('audioFile.fullPath :' + audioFile.fullPath + ' || audioFile.root.name :' + audioFile.root.name);
 
+        fileSystem.root.getFile(audioFile.fullPath, null, function(fileEntry){
+
+          alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
+
+          fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
+            alert('Created and in Dir: ' + fileSystem2.root.name);
+
+            var newFolder = fileSystem2.root.name;
+            var parentName = newFolder.substring(newFolder.lastIndexOf('/')+1);
+            alert('newFolder: ' + newFolder + ' || parentName: ' + parentName)
+            var parentEntry = new DirectoryEntry(parentName, newFolder);
+
+            // move the file to a new directory and rename it
+            fileEntry.moveTo(parentEntry, fileEntry.name, successMove, failMove);
+
+          }, fail3);
 
         }, fail3);
+
+        /*
+        
+        */
       }, fail3);
     }
 
     function fail3(evt) {
-      alert('Error');
-        alert('Error ' + evt.target.error.code);
+      alert('Error ' + evt.target.error.code);
+    }
+
+    function successMove(entry) {
+      alert("Move successful! New Path: " + entry.fullPath);
+    }
+
+    function failMove(error) {
+        alert('Move error: ' + error.code);
     }
 
     /*
