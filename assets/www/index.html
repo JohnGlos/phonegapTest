@@ -21,7 +21,7 @@
         case 'cameraPage':
           refreshNoteGallery();
         break;
-        case 'filePage':
+        case 'audioPage':
           refreshAudio();
         break;
       }
@@ -646,7 +646,7 @@
 
 
 
-
+    /*
     function accessRecordings(){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
     }
@@ -686,7 +686,7 @@
 	function dirReadFail(error) {
 		alert("Failed to list directory contents: " + error.code);
 	}
-
+  */
 
 
 	function getObjProp(object){
@@ -709,21 +709,6 @@
 
 
 
-  function playSound(url) {
-      // Play the audio file at url
-      var my_media = new Media(url,
-          // success callback
-          function() {
-              alert("playSound():Audio Success");
-          },
-          // error callback
-          function(err) {
-              alert("playSound():Audio Error: "+err);
-      });
-
-      // Play audio
-      my_media.play();
-  }
 
 
 
@@ -766,9 +751,9 @@
   var my_media;
 
   function playAudioNote(url, aLink) {
-      /*
       my_media.stop();
 
+      /*
       $('.audioNote .playControl').each(function(index) {
           $(this).removeClass('stop').addClass('play');
           $(this).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
@@ -779,15 +764,15 @@
       my_media = new Media(url,
           // success callback
           function() {
-              //alert("playSound():Audio Success");
+              //alert("playAudioNote():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
-              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
+              $(aLink).attr('onclick', '(\'' + url + '\', this)');
           },
           // error callback
           function(err) {
-              alert("playSound():Audio Error: "+err);
+              alert("playAudioNote():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
-              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
+              $(aLink).attr('onclick', '(\'' + url + '\', this)');
       });
 
       // Play audio
@@ -960,18 +945,13 @@
 
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
-    <button onclick="uploadFile( {name:'readme.txt', fullPath: 'file:///mnt/sdcard', type: 'text/plain', lastModifiedDate: 1356436800000, size: 16} );">Add fake Audio</button> <br/><br/>
+    <h1>Audio Notes</h1>
+    <div id="audioNotes">
 
-    <button onclick="playSound('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
-    <button onclick="playSound('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
-    <button onclick="playSound('file:///My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    </div>
 	</div>
 
 	<div data-role="page" id="notificationsPage">
-		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
-	    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
-	    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
-	    <br/>
 	    <input type="text" id="notificationText" placeholder="Notification message"/>
       <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
       <label for="notificationDate">Date</label>
@@ -993,10 +973,6 @@
       <a href="file:///sdcard/My Documents/My Recordings/Voice0006.amr">file:///sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
       <a href="file:///My Documents/My Recordings/Voice0006.amr">file:///My Documents/My Recordings/Voice0006.amr</a><br/>
     </p>
-    <h1>Audio Notes</h1>
-    <div id="audioNotes">
-
-    </div>
 	</div>
 
 	<div data-role="page" id="template">
