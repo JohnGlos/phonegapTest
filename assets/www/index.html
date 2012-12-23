@@ -647,7 +647,7 @@
 
 
 
-    /*
+
     function accessRecordings(){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
     }
@@ -687,7 +687,6 @@
 	function dirReadFail(error) {
 		alert("Failed to list directory contents: " + error.code);
 	}
-  */
 
 
 
@@ -754,13 +753,13 @@
       my_media = new Media(url,
           // success callback
           function() {
-              //alert("playAudioNote():Audio Success");
+              //alert("playSound():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
           },
           // error callback
           function(err) {
-              alert("playAudioNote():Audio Error: "+err);
+              alert("playSound():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
       });
