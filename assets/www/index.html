@@ -647,7 +647,7 @@
 
 
 
-    /*
+
     function accessRecordings(){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
     }
@@ -687,7 +687,7 @@
 	function dirReadFail(error) {
 		alert("Failed to list directory contents: " + error.code);
 	}
-  */
+
 
 
 	function getObjProp(object){
@@ -710,6 +710,21 @@
 
 
 
+  function playSound(url) {
+      // Play the audio file at url
+      var my_media = new Media(url,
+          // success callback
+          function() {
+              alert("playSound():Audio Success");
+          },
+          // error callback
+          function(err) {
+              alert("playSound():Audio Error: "+err);
+      });
+
+      // Play audio
+      my_media.play();
+  }
 
 
 
@@ -719,13 +734,11 @@
 
 
   function refreshAudio(){
-    alert('refreshing audio notes');
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
 
       //alert('FileSystem.root.name: ' + fileSystem.root.name + ' || fileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
       fileSystem.root.getDirectory("SoCMobile", null, function(fileSystem2){
-        alert('in SoCMobile');
 
         //alert('fileSystem.name: ' + fileSystem2.name + ' || fileSystem.fullPath: ' + fileSystem2.fullPath);
         
@@ -734,7 +747,7 @@
 
         // Get a list of all the entries in the directory
         directoryReader.readEntries(function(entries){
-          alert('Reading dir');
+          alert('refreshing audio notes');
           var recordings = '';
           var i;
           for (i=0; i<entries.length; i++) {
@@ -767,15 +780,15 @@
       my_media = new Media(url,
           // success callback
           function() {
-              //alert("playAudioNote():Audio Success");
+              //alert("playSound():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
-              $(aLink).attr('onclick', '(\'' + url + '\', this)');
+              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
           },
           // error callback
           function(err) {
-              alert("playAudioNote():Audio Error: "+err);
+              alert("playSound():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
-              $(aLink).attr('onclick', '(\'' + url + '\', this)');
+              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
       });
 
       // Play audio
@@ -947,14 +960,23 @@
 	</div>
 
 	<div data-role="page" id="audioPage">
-    <button onclick="captureAudio();">Capture Audio</button>
+    <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
+    <button onclick="uploadFile( {name:'readme.txt', fullPath: 'file:///mnt/sdcard', type: 'text/plain', lastModifiedDate: 1356436800000, size: 16} );">Add fake Audio</button> <br/><br/>
     <h1>Audio Notes</h1>
     <div id="audioNotes">
 
     </div>
+
+    <button onclick="playSound('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    <button onclick="playSound('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    <button onclick="playSound('file:///My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
 	</div>
 
 	<div data-role="page" id="notificationsPage">
+		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
+	    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
+	    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
+	    <br/>
 	    <input type="text" id="notificationText" placeholder="Notification message"/>
       <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
       <label for="notificationDate">Date</label>
@@ -976,6 +998,7 @@
       <a href="file:///sdcard/My Documents/My Recordings/Voice0006.amr">file:///sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
       <a href="file:///My Documents/My Recordings/Voice0006.amr">file:///My Documents/My Recordings/Voice0006.amr</a><br/>
     </p>
+    
 	</div>
 
 	<div data-role="page" id="template">
