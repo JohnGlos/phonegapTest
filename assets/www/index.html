@@ -662,8 +662,8 @@
 		for (i=0; i<entries.length; i++) {
       //alert(entries[i].name);
 			alert(entries[i].name + ' || Path: ' + entries[i].path + ' || fullPath: ' + entries[i].fullPath);
-
-      recordings = recordings + '<a href="file:///mnt/sdcard/My Documents/My Recordings/' + entries[i].name + '">' + entries[i].name + '</a><br/>';
+      
+      recordings = recordings + '<button onclick="playAudio(\'' + entries[i].fullPath + '\');">Play ' + entries[i].name + '</button><br/>';
 		}
     $('#recordings').html(recordings);
 	}
