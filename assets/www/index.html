@@ -765,18 +765,8 @@
   }
 
   var my_media;
-  var my_mediaPlaying = false;
 
   function playAudioNote(url, aLink) {
-      stopAudioNote(url, aLink);
-
-      $('.audioNote .playControl').each(function(index) {
-          $(this).removeClass('stop').addClass('play');
-
-          var sameURL = $(this).attr('onclick').substring(15, $(this).attr('onclick').length-2);
-          $(this).attr('onclick', 'playAudioNote(\'' + sameURL + '\', this)');
-      });
-
       // Play the audio file at url
       my_media = new Media(url,
           // success callback
@@ -784,14 +774,12 @@
               //alert("playSound():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
-              my_mediaPlaying = false;
           },
           // error callback
           function(err) {
               alert("playSound():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
-              my_mediaPlaying = false;
       });
 
       // Play audio
@@ -799,16 +787,12 @@
       $(aLink).removeClass('play').addClass('stop');
       $(aLink).attr('onclick', 'stopAudioNote(\'' + url + '\', this)');
       my_media.play();
-      my_mediaPlaying = true;
   }
 
   function stopAudioNote(url, aLink){
-    if(my_mediaPlaying){
-      my_media.stop();
-      $(aLink).removeClass('stop').addClass('play');
-      $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
-      my_mediaPlaying = false;
-    }
+    my_media.stop();
+    $(aLink).removeClass('stop').addClass('play');
+    $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
   }
 
     </script>
