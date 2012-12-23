@@ -258,6 +258,7 @@
           alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
 
           fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
+            alert('created or in dir');
             alert('Created and in Dir: ' + fileSystem2.root.name);
 
             var newFolder = fileSystem2.root.name;
@@ -270,7 +271,7 @@
 
           }, fail3);
 
-        }, fail3);
+        }, function(error){alert('error'); alert('get file error: ' + error.code);});
 
         /*
         
