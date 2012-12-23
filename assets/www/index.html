@@ -253,7 +253,7 @@
 
         alert('audioFile.fullPath: ' + audioFile.fullPath);
 
-        fileSystem.root.getFile(audioFile.fullPath.substring(19), null, function(fileEntry){
+        fileSystem.root.getFile(audioFile.fullPath, null, function(fileEntry){
 
           alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
 
@@ -846,7 +846,7 @@
 
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
-    <button onclick="uploadFile( {name:'readme.txt', fullPath: 'file:///mnt/sdcard', type: 'text/txt', lastModifiedDate: 1356436800000, size: 16} );">Add fake Audio</button> <br/><br/>
+    <button onclick="uploadFile( {name:'readme.txt', fullPath: 'file:///mnt/sdcard', type: 'text/plain', lastModifiedDate: 1356436800000, size: 16} );">Add fake Audio</button> <br/><br/>
 
     <button onclick="playAudio('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
     <button onclick="playAudio('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
