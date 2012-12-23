@@ -249,11 +249,11 @@
     //This works
     function uploadFile(audioFile){
       window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-        alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root: ' + fileSystem.root + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
+        alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
-        alert('audioFile.fullPath: ' + audioFile.fullPath);
+        alert('audioFile.fullPath: ' + audioFile.fullPath + ' || audioFile.fullPath (relative): ' + audioFile.fullPath.substring(fullPath.lastIndexOf('sdcard/')+7));
 
-        fileSystem.root.getFile(audioFile.fullPath, null, function(fileEntry){
+        fileSystem.root.getFile(audioFile.fullPath.substring(fullPath.lastIndexOf('sdcard/')+7), null, function(fileEntry){
 
           alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
 
