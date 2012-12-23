@@ -251,9 +251,9 @@
       window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
         alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root: ' + fileSystem.root + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
-        alert('audioFile.fullPath :' + audioFile.fullPath);
+        alert('audioFile.fullPath: ' + audioFile.fullPath);
 
-        fileSystem.root.getFile(audioFile.fullPath, null, function(fileEntry){
+        fileSystem.root.getFile(audioFile.fullPath.substring(19), null, function(fileEntry){
 
           alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
 
@@ -279,6 +279,7 @@
     }
 
     function fail3(evt) {
+      alert('error');
       alert('Error ' + evt.target.error.code);
     }
 
