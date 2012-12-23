@@ -719,11 +719,13 @@
 
 
   function refreshAudio(){
+    alert('refreshing audio notes');
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
 
       //alert('FileSystem.root.name: ' + fileSystem.root.name + ' || fileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
       fileSystem.root.getDirectory("SoCMobile", null, function(fileSystem2){
+        alert('in SoCMobile');
 
         //alert('fileSystem.name: ' + fileSystem2.name + ' || fileSystem.fullPath: ' + fileSystem2.fullPath);
         
@@ -732,7 +734,7 @@
 
         // Get a list of all the entries in the directory
         directoryReader.readEntries(function(entries){
-          alert('refreshing audio notes');
+          alert('Reading dir');
           var recordings = '';
           var i;
           for (i=0; i<entries.length; i++) {
@@ -945,7 +947,7 @@
 	</div>
 
 	<div data-role="page" id="audioPage">
-    <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
+    <button onclick="captureAudio();">Capture Audio</button>
     <h1>Audio Notes</h1>
     <div id="audioNotes">
 
