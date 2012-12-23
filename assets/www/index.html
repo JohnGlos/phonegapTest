@@ -224,9 +224,10 @@
         navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 1});
     }
 
+    /*
     // Upload files to server
     function uploadFile(mediaFile) {
-        alert('Uploading file');
+        alert('Uploading file ' + mediaFile);
 
         var ft = new FileTransfer(),
             path = mediaFile.fullPath,
@@ -243,7 +244,38 @@
             },
             { fileName: name });   
     }
+    */
 
+    function uploadFile(mediaFile){
+      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+        alert('FileSystem.root.name: ' + fileSystem.root.name);
+
+        fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
+          alert('in Dir: ' + fileSystem2.fullPath);
+
+
+        }, fail3);
+      }, fail3);
+    }
+
+    function fail3(evt) {
+      alert('Error');
+        alert('Error ' + evt.target.error.code);
+    }
+
+    /*
+    function gotDir(fileSystem){
+    alert('at gotDir()');
+
+    alert('FileSystem: ' + fileSystem + ' || fileSystem.root: ' + fileSystem.root + ' || fileSystem.name: ' + fileSystem.name + ' || fileSystem.fullPath: ' + fileSystem.fullPath);
+    
+    // Get a directory reader
+    var directoryReader = fileSystem.createReader();
+
+    // Get a list of all the entries in the directory
+    directoryReader.readEntries(dirReadSuccess,dirReadFail);
+  }
+  */
 
 
 
@@ -507,55 +539,6 @@
       else if(date == 3 || date == 23){return 'rd';}
       else{return 'th';}
     }
-
-
-
-
-
-
-
-
-    // Record audio
-    // 
-    function recordAudio() {
-        var src = "myrecording.amr";
-        var mediaRec = new Media(src, onSuccess, onError);
-
-        // Record audio
-        mediaRec.startRecord();
-
-        // Stop recording after 10 sec
-        var recTime = 0;
-        var recInterval = setInterval(function() {
-            recTime = recTime + 1;
-            setAudioPosition(recTime + " sec");
-            if (recTime >= 10) {
-                clearInterval(recInterval);
-                mediaRec.stopRecord();
-            }
-        }, 1000);
-    }
-
-    // onSuccess Callback
-    //
-    function onSuccess() {
-        alert("recordAudio():Audio Success");
-    }
-
-    // onError Callback 
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' + 
-              'message: ' + error.message + '\n');
-    }
-
-    // Set audio position
-    // 
-    function setAudioPosition(position) {
-        document.getElementById('audio_position').innerHTML = position;
-    }
-
-
 
 
 
@@ -834,28 +817,6 @@
 
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
-		<button onclick="recordAudio();">Record Audio</button> <br>
-    <p id="audio_position"></p>
-
-    <audio controls="controls"> 
-          <source src="file:///mnt/sdcard/Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
-        Your browser does not support the audio element. 
-    </audio><audio controls="controls"> 
-          <source src="file:///sdcard/Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
-        Your browser does not support the audio element. 
-    </audio>
-    </audio><audio controls="controls"> 
-          <source src="file:///Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
-        Your browser does not support the audio element. 
-    </audio>
-    <audio controls="controls"> 
-          <source src="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
-        Your browser does not support the audio element. 
-    </audio> 
-    <audio controls="controls"> 
-          <source src="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
-        Your browser does not support the audio element. 
-    </audio> <br/><br/>
 
     <button onclick="playAudio('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
     <button onclick="playAudio('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
