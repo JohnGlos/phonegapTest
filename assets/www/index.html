@@ -660,9 +660,12 @@
     var recordings = '';
 		var i;
 		for (i=0; i<entries.length; i++) {
-			//alert(entries[i].name);
+      //alert(entries[i].name);
+			alert(entries[i].name + ' || Path: ' + entries[i].path + ' || fullPath: ' + entries[i].fullPath);
+
       recordings = recordings + '<a href="file:///mnt/sdcard/My Documents/My Recordings/' + entries[i].name + '">' + entries[i].name + '</a><br/>';
 		}
+    $('#recordings').html(recordings);
 	}
 
 	function dirReadFail(error) {
@@ -688,6 +691,28 @@
         return details;
 
 	}
+
+
+
+
+
+
+
+  function playAudio(url) {
+      // Play the audio file at url
+      var my_media = new Media(url,
+          // success callback
+          function() {
+              alert("playAudio():Audio Success");
+          },
+          // error callback
+          function(err) {
+              alert("playAudio():Audio Error: "+err);
+      });
+
+      // Play audio
+      my_media.play();
+  }
 
     </script>
     <style type="text/css">
@@ -811,6 +836,7 @@
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
 		<button onclick="recordAudio();">Record Audio</button> <br>
     <p id="audio_position"></p>
+
     <audio controls="controls"> 
           <source src="file:///mnt/sdcard/Music/Whole Lotta Love.mp3" type="audio/mpeg"/> 
         Your browser does not support the audio element. 
@@ -829,7 +855,11 @@
     <audio controls="controls"> 
           <source src="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr"/> 
         Your browser does not support the audio element. 
-    </audio> 
+    </audio> <br/><br/>
+
+    <button onclick="playAudio('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    <button onclick="playAudio('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    <button onclick="playAudio('file:///My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
 	</div>
 
 	<div data-role="page" id="notificationsPage">
@@ -854,9 +884,9 @@
 		<p><a href="#" onclick="readFile()">Read File</a></p>
 		<p><a href="#" onclick="accessRecordings()">Access Recordings Folder</a></p>
     <p id="recordings">
-      <a href="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr">file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr</a>
-      <a href="file:///sdcard/My Documents/My Recordings/Voice0006.amr">file:///sdcard/My Documents/My Recordings/Voice0006.amr</a>
-      <a href="file:///My Documents/My Recordings/Voice0006.amr">file:///My Documents/My Recordings/Voice0006.amr</a>
+      <a href="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr">file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
+      <a href="file:///sdcard/My Documents/My Recordings/Voice0006.amr">file:///sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
+      <a href="file:///My Documents/My Recordings/Voice0006.amr">file:///My Documents/My Recordings/Voice0006.amr</a><br/>
     </p>
 	</div>
 
