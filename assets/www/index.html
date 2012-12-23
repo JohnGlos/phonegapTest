@@ -647,7 +647,7 @@
 
 
 
-
+    /*
     function accessRecordings(){
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
     }
@@ -687,6 +687,7 @@
 	function dirReadFail(error) {
 		alert("Failed to list directory contents: " + error.code);
 	}
+  */
 
 
 
@@ -707,24 +708,6 @@
         return details;
 
 	}
-
-
-
-  function playSound(url) {
-      // Play the audio file at url
-      var my_media = new Media(url,
-          // success callback
-          function() {
-              alert("playSound():Audio Success");
-          },
-          // error callback
-          function(err) {
-              alert("playSound():Audio Error: "+err);
-      });
-
-      // Play audio
-      my_media.play();
-  }
 
 
 
@@ -771,13 +754,13 @@
       my_media = new Media(url,
           // success callback
           function() {
-              //alert("playSound():Audio Success");
+              //alert("playAudioNote():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
           },
           // error callback
           function(err) {
-              alert("playSound():Audio Error: "+err);
+              alert("playAudioNote():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
               $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
       });
@@ -952,15 +935,8 @@
 
 	<div data-role="page" id="audioPage">
     <button onclick="captureAudio();">Capture Audio</button> <br/><br/>
-    <button onclick="uploadFile( {name:'readme.txt', fullPath: 'file:///mnt/sdcard', type: 'text/plain', lastModifiedDate: 1356436800000, size: 16} );">Add fake Audio</button> <br/><br/>
     <h1>Audio Notes</h1>
-    <div id="audioNotes">
-
-    </div>
-
-    <button onclick="playSound('file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
-    <button onclick="playSound('file:///sdcard/My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
-    <button onclick="playSound('file:///My Documents/My Recordings/Voice0006.amr');">Play Audio</button><br/>
+    <div id="audioNotes"></div>
 	</div>
 
 	<div data-role="page" id="notificationsPage">
