@@ -766,12 +766,14 @@
   var my_media;
 
   function playAudioNote(url, aLink) {
+      /*
       my_media.stop();
-      
+
       $('.audioNote .playControl').each(function(index) {
           $(this).removeClass('stop').addClass('play');
           $(this).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
       });
+      */
 
       // Play the audio file at url
       my_media = new Media(url,
