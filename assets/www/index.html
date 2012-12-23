@@ -763,24 +763,42 @@
     }, fail2);
   }
 
+  var my_media;
+
   function playAudioNote(url, aLink) {
+      my_media.stop();
+      
+      $('.audioNote .playControl').each(function(index) {
+          $(this).removeClass('stop').addClass('play');
+          $(this).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
+      });
+
       // Play the audio file at url
-      var my_media = new Media(url,
+      my_media = new Media(url,
           // success callback
           function() {
               //alert("playSound():Audio Success");
               $(aLink).removeClass('stop').addClass('play');
+              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
           },
           // error callback
           function(err) {
               alert("playSound():Audio Error: "+err);
               $(aLink).removeClass('stop').addClass('play');
+              $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
       });
 
       // Play audio
 
       $(aLink).removeClass('play').addClass('stop');
+      $(aLink).attr('onclick', 'stopAudioNote(\'' + url + '\', this)');
       my_media.play();
+  }
+
+  function stopAudioNote(url, aLink){
+    my_media.stop();
+    $(aLink).removeClass('stop').addClass('play');
+    $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
   }
 
     </script>
