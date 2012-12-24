@@ -577,7 +577,7 @@
 
 
 
-
+    /*
     function writeToFile() {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
     }
@@ -639,6 +639,7 @@
         };
         reader.readAsText(file);
     }
+    */
 
     function fail2(evt) {
     	alert('Error');
@@ -919,7 +920,7 @@
   		<a href="#cameraPage" data-role="button">Camera</a>
   		<a href="#audioPage" data-role="button">Audio</a>
   		<a href="#notificationsPage" data-role="button">Notifications</a>
-  		<a href="#filePage" data-role="button">Files</a>
+  		<!--<a href="#filePage" data-role="button">Files</a>-->
   	</div>
 
   	<div data-role="page" id="cameraPage">
@@ -955,17 +956,17 @@
 	    </div>
 	</div>
 
+  <!--
 	<div data-role="page" id="filePage">
 		<p><a href="#" onclick="writeToFile()">Write to File</a></p>
 		<p><a href="#" onclick="readFile()">Read File</a></p>
 		<p><a href="#" onclick="accessRecordings()">Access My Recordings Folder</a></p>
     <p id="recordings">
-      <a href="file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr">file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
-      <a href="file:///sdcard/My Documents/My Recordings/Voice0006.amr">file:///sdcard/My Documents/My Recordings/Voice0006.amr</a><br/>
-      <a href="file:///My Documents/My Recordings/Voice0006.amr">file:///My Documents/My Recordings/Voice0006.amr</a><br/>
+
     </p>
     
 	</div>
+  -->
 
 	<div data-role="page" id="template">
 	</div>
