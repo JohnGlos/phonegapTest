@@ -773,7 +773,7 @@
 
   function removeSuccess(entry) {
   	refreshAudio();
-    console.log("Removal successful");
+    //alert("Removal successful");
   }
 
 	function removeFail(error) {
@@ -916,9 +916,16 @@
       background-position: -28px 0px;
     }
 
-    a.removeAudioNote{
-    	top: 5px;
-    	right: 5px;
+	a.removeAudioNote{
+		display: block;
+		position: absolute;
+		top: 3px;
+		right: 7px;
+		color: #ccc;
+		text-decoration: none;
+	}
+
+    a.removeAudioNote:hover{
     	color: #DD5447;
     }
     </style>
