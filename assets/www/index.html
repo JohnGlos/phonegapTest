@@ -42,6 +42,14 @@
         destinationType=navigator.camera.DestinationType;
     }
 
+    // A button will call this function
+    //
+    function capturePhoto() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+        destinationType: destinationType.DATA_URL });
+    }
+
     // Called when a photo is successfully retrieved
     //
     function onPhotoDataSuccess(imageData) {
@@ -124,7 +132,7 @@
 
 
 
-
+    /*
     // Called when a photo is successfully retrieved
     //
     function onPhotoURISuccess(imageURI) {
@@ -145,15 +153,6 @@
       largeImage.src = imageURI;
     }
 
-    // A button will call this function
-    //
-    function capturePhoto() {
-      // Take picture using device camera and retrieve image as base64-encoded string
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-        destinationType: destinationType.DATA_URL });
-    }
-
-    /*
     // A button will call this function
     //
     function capturePhotoEdit() {
@@ -712,7 +711,9 @@
             //alert(entries[i].name);
             //alert(entries[i].name + ' || Path: ' + entries[i].path + ' || fullPath: ' + entries[i].fullPath);
             
-            recordings = recordings + '<div class="audioNote">' + entries[i].name + '<br/><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a></div>';
+            //recordings = recordings + '<div class="audioNote">' + entries[i].name + '<br/><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a></div>';
+            var removeAudioNoteCode = '<a href="javascript:void(0);" onclick="removeAudioNote(\'' + entries[i].fullPath + '\')" class="removeAudioNote" title="Remove audio note">&#10006;</a>';
+            recordings = recordings + '<div class="audioNote"><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a>' + entries[i].name + removeAudioNoteCode + '</div>';
           }
           $('#audioNotes').html(recordings);
 
@@ -751,6 +752,10 @@
     my_media.stop();
     $(aLink).removeClass('stop').addClass('play');
     $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
+  }
+
+  function removeAudioNote(url){
+    alert('remove ' + url);
   }
 
     </script>
@@ -853,6 +858,7 @@
 
 
     .audioNote{
+      position: relative;
       margin-bottom: 10px;
       padding: 5px;
       border: 1px solid #ddd;
@@ -863,13 +869,14 @@
       display: inline-block;
       width: 28px;
       height: 28px;
+      margin-right: 10px;
       background-color: #45D285;
       text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
       font-size: 1.3em;
       color: #666;
       text-decoration: none;
       border-radius: 9px;
-      background-image:url('images/playStop.png');
+      background-image:url('playStop.png');
 
       -webkit-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
       -moz-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
@@ -886,6 +893,18 @@
 
     a.playControl.stop{
       background-position: -28px 0px;
+    }
+
+    .removeAudioNote.ui-link{
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      text-decoration: none;
+      color: #ddd;
+    }
+
+    .removeAudioNote.ui-link:hover{
+      color: #DD5447;
     }
     </style>
   </head>
@@ -904,9 +923,9 @@
 		<button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
 		<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
 		<button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
-    -->
 		<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
 		<img style="display:none;" id="largeImage" src="" />
+    -->
     <div id="noteImageGallery"></div>
 	</div>
 
