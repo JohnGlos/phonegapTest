@@ -641,17 +641,14 @@
     }
     */
 
-    function fail2(evt) {
-    	alert('Error');
-        alert(evt.target.error.code);
-    }
+    
 
 
 
-
-    function accessRecordings(){
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
-    }
+  /*
+  function accessRecordings(){
+      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
+  }
 
 	function gotFS3(fileSystem) {
 		alert('FileSystem: ' + getObjProp(fileSystem) + ' fileSystem.root: ' + getObjProp(fileSystem.root));
@@ -684,10 +681,9 @@
 		}
     $('#recordings').html(recordings);
 	}
+  */
 
-	function dirReadFail(error) {
-		alert("Failed to list directory contents: " + error.code);
-	}
+	
 
 
 
@@ -712,8 +708,16 @@
 
 
 
+  
 
+  function fail2(evt) {
+    alert('Error');
+    alert(evt.target.error.code);
+  }
 
+  function dirReadFail(error) {
+    alert("Failed to list directory contents: " + error.code);
+  }
 
 
   function refreshAudio(){
@@ -925,9 +929,11 @@
 
   	<div data-role="page" id="cameraPage">
 		<button onclick="capturePhoto();">Capture Photo</button> <br>
+    <!--
 		<button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
 		<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
 		<button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    -->
 		<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
 		<img style="display:none;" id="largeImage" src="" />
     <div id="noteImageGallery"></div>
