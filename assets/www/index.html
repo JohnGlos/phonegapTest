@@ -713,7 +713,7 @@
             
             //recordings = recordings + '<div class="audioNote">' + entries[i].name + '<br/><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a></div>';
             var removeAudioNoteCode = '<a href="javascript:void(0);" onclick="removeAudioNote(\'' + entries[i].fullPath + '\')" class="removeAudioNote" title="Remove audio note">&#10006;</a>';
-            recordings = recordings + '<div class="audioNote"><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a>' + entries[i].name + removeAudioNoteCode + '</div>';
+            recordings = recordings + '<div class="audioNote"><a href="javascript:void(0);" onclick="playAudioNote(\'' + entries[i].fullPath + '\', this)" class="playControl play"></a>' + entries[i].name.substring(0, entries[i].name.lastIndexOf('.')) + removeAudioNoteCode + '</div>';
           }
           $('#audioNotes').html(recordings);
 
