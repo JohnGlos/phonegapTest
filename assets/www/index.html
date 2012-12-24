@@ -170,153 +170,21 @@
         destinationType: destinationType.FILE_URI,
         sourceType: source });
     }
-    */
 
     // Called if something bad happens.
     // 
     function onFail(message) {
       alert('Failed because: ' + message);
     }
-
-
-
-
-
-
-
-
-    // Called when capture operation is finished
-    //
-    function captureSuccess(mediaFiles) {
-        var i, len;
-        alert('capture success - Files: ' + mediaFiles.length);
-
-        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-            var details;
-            var fieldContents;
-
-            for (var field in mediaFiles[i]) {
-              fieldContents = mediaFiles[i][field];
-              if (typeof(fieldContents) == "function") {
-                fieldContents = "(function)";
-              }
-              details += "  " + field + ": " + fieldContents + "\n";
-            }
-
-            alert(details);
-
-
-            uploadFile(mediaFiles[i]);
-        }
-
-        //file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr
-    }
-
-    // Called if something bad happens.
-    // 
-    function captureError(error) {
-        var msg = 'An error occurred during capture (Code ' + error.code + ')';
-        navigator.notification.alert(msg, null, 'Capture error');
-    }
-
-    // A button will call this function
-    //
-    function captureAudio() {
-        // Launch device audio recording application, 
-        // allowing user to capture up to 2 audio clips
-        navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 1});
-    }
-
-    /*
-    // Upload files to server
-    function uploadFile(mediaFile) {
-        alert('Uploading file ' + mediaFile);
-
-        var ft = new FileTransfer(),
-            path = mediaFile.fullPath,
-            name = mediaFile.name;
-
-        ft.upload(path,
-            "http://my.domain.com/upload.php",
-            function(result) {
-                alert('Upload success: ' + result.responseCode);
-                alert(result.bytesSent + ' bytes sent');
-            },
-            function(error) {
-                alert('Error uploading file ' + path + ': ' + error.code);
-            },
-            { fileName: name });   
-    }
     */
 
-    //This works
-    function uploadFile(audioFile){
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
-        alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
 
-        alert('audioFile.fullPath: ' + audioFile.fullPath + ' || audioFile.fullPath (relative): ' + audioFile.fullPath.substring(audioFile.fullPath.lastIndexOf('sdcard/')+7));
 
-        fileSystem.root.getFile(audioFile.fullPath.substring(audioFile.fullPath.lastIndexOf('sdcard/')+7), null, function(fileEntry){
 
-          alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
 
-          fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
-            alert('created or in dir');
-            alert('Created and in Dir: ' + fileSystem2.fullPath);
 
-            var newFolder = fileSystem2.fullPath;
-            var parentName = newFolder.substring(newFolder.lastIndexOf('/')+1);
-            alert('newFolder: ' + newFolder + ' || parentName: ' + parentName)
-            var parentEntry = new DirectoryEntry(parentName, newFolder);
-
-            // move the file to a new directory and rename it
-            fileEntry.moveTo(parentEntry, fileEntry.name, successMove, failMove);
-
-          }, fail3);
-
-        }, function(error){alert('error'); alert('get file error: ' + error.code);});
-
-        /*
-        
-        */
-      }, fail3);
-    }
-
-    function fail3(evt) {
-      alert('error');
-      alert('Error ' + evt.target.error.code);
-    }
-
-    function successMove(entry) {
-      alert("Move successful! New Path: " + entry.fullPath);
-      refreshAudio();
-    }
-
-    function failMove(error) {
-        alert('Move error: ' + error.code);
-    }
 
     /*
-    function gotDir(fileSystem){
-    alert('at gotDir()');
-
-    alert('FileSystem: ' + fileSystem + ' || fileSystem.root: ' + fileSystem.root + ' || fileSystem.name: ' + fileSystem.name + ' || fileSystem.fullPath: ' + fileSystem.fullPath);
-    
-    // Get a directory reader
-    var directoryReader = fileSystem.createReader();
-
-    // Get a list of all the entries in the directory
-    directoryReader.readEntries(dirReadSuccess,dirReadFail);
-  }
-  */
-
-
-
-
-
-
-
-
     // Show a custom alert
     //
     function showAlert() {
@@ -338,6 +206,7 @@
     function vibrate() {
         navigator.notification.vibrate(2000);
     }
+    */
 
 
 
@@ -681,10 +550,6 @@
 		}
     $('#recordings').html(recordings);
 	}
-  */
-
-	
-
 
 
 	function getObjProp(object){
@@ -704,11 +569,117 @@
         return details;
 
 	}
+  */
 
 
 
 
-  
+
+
+  //Record Audio
+    //
+    function captureSuccess(mediaFiles) {
+        var i, len;
+        //alert('capture success - Files: ' + mediaFiles.length);
+
+        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+            var details;
+            var fieldContents;
+
+            for (var field in mediaFiles[i]) {
+              fieldContents = mediaFiles[i][field];
+              if (typeof(fieldContents) == "function") {
+                fieldContents = "(function)";
+              }
+              details += "  " + field + ": " + fieldContents + "\n";
+            }
+
+            alert(details);
+
+
+            uploadFile(mediaFiles[i]);
+        }
+
+        //file:///mnt/sdcard/My Documents/My Recordings/Voice0006.amr
+    }
+
+    // Called if something bad happens.
+    // 
+    function captureError(error) {
+        var msg = 'An error occurred during capture (Code ' + error.code + ')';
+        navigator.notification.alert(msg, null, 'Capture error');
+    }
+
+    // A button will call this function
+    //
+    function captureAudio() {
+        // Launch device audio recording application, 
+        // allowing user to capture up to 2 audio clips
+        navigator.device.capture.captureAudio(captureSuccess, captureError, {limit: 1});
+    }
+
+    //This works
+    function uploadFile(audioFile){
+      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+        //alert('FileSystem.root.name: ' + fileSystem.root.name + ' || FileSystem.root.fullPath: ' + fileSystem.root.fullPath);
+
+        //alert('audioFile.fullPath: ' + audioFile.fullPath + ' || audioFile.fullPath (relative): ' + audioFile.fullPath.substring(audioFile.fullPath.lastIndexOf('sdcard/')+7));
+
+        fileSystem.root.getFile(audioFile.fullPath.substring(audioFile.fullPath.lastIndexOf('sdcard/')+7), null, function(fileEntry){
+
+          alert('At file ' + fileEntry.name + ' in dir: ' + fileEntry.fullPath);
+
+          fileSystem.root.getDirectory("SoCMobile", {create: true, exclusive: false}, function(fileSystem2){
+            //alert('created or in dir');
+            alert('Created and in Dir: ' + fileSystem2.fullPath);
+
+            var newFolder = fileSystem2.fullPath;
+            var parentName = newFolder.substring(newFolder.lastIndexOf('/')+1);
+            //alert('newFolder: ' + newFolder + ' || parentName: ' + parentName)
+            var parentEntry = new DirectoryEntry(parentName, newFolder);
+
+            // move the file to a new directory and rename it
+            fileEntry.moveTo(parentEntry, fileEntry.name, successMove, failMove);
+
+          }, fail3);
+
+        }, function(error){alert('error'); alert('get file error: ' + error.code);});
+
+        /*
+        
+        */
+      }, fail3);
+    }
+
+    function fail3(evt) {
+      alert('error');
+      alert('Error ' + evt.target.error.code);
+    }
+
+    function successMove(entry) {
+      alert("Move successful! New Path: " + entry.fullPath);
+      refreshAudio();
+    }
+
+    function failMove(error) {
+        alert('Move error: ' + error.code);
+    }
+
+    /*
+    function gotDir(fileSystem){
+      alert('at gotDir()');
+
+      alert('FileSystem: ' + fileSystem + ' || fileSystem.root: ' + fileSystem.root + ' || fileSystem.name: ' + fileSystem.name + ' || fileSystem.fullPath: ' + fileSystem.fullPath);
+      
+      // Get a directory reader
+      var directoryReader = fileSystem.createReader();
+
+      // Get a list of all the entries in the directory
+      directoryReader.readEntries(dirReadSuccess,dirReadFail);
+    }
+  */
+
+
 
   function fail2(evt) {
     alert('Error');
@@ -946,20 +917,22 @@
 	</div>
 
 	<div data-role="page" id="notificationsPage">
-		<p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
-	    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
-	    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
-	    <br/>
-	    <input type="text" id="notificationText" placeholder="Notification message"/>
-      <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
-      <label for="notificationDate">Date</label>
-      <input type="date" id="notificationDate" placeholder="YYYY-MM-DD" onfocus="notificationDateFocus()"/>
-      <label for="notificationTime">Time</label>
-      <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
+    <!--
+	  <p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
+    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
+    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
+    <br/>
+    -->
+    <input type="text" id="notificationText" placeholder="Notification message"/>
+    <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
+    <label for="notificationDate">Date</label>
+    <input type="date" id="notificationDate" placeholder="YYYY-MM-DD" onfocus="notificationDateFocus()"/>
+    <label for="notificationTime">Time</label>
+    <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
     <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
-	    <div id="setNotifications">
-	      
-	    </div>
+    <div id="setNotifications">
+      
+    </div>
 	</div>
 
   <!--
