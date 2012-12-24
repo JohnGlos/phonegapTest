@@ -754,13 +754,14 @@
     $(aLink).attr('onclick', 'playAudioNote(\'' + url + '\', this)');
   }
 
+
   function removeAudioNote(url){
     alert('remove ' + url);
     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
       alert('In ' + fileSystem.root.fullPath);
-      alert('Gettings file at ' + url);
+      alert('Gettings file at ' + url.substring(url.lastIndexOf('sdcard/')+7));
 
-      fileSystem.root.getFile(url, null, function(fileEntry){
+      fileSystem.root.getFile(url.substring(url.lastIndexOf('sdcard/')+7), null, function(fileEntry){
         alert('got file ' + fileEntry.fullPath);
 
         fileEntry.remove(removeSuccess, removeFail);
@@ -877,12 +878,13 @@
     /* --- Picture Notes end --- */
 
 
-    .audioNote{
-      margin-bottom: 10px;
-      padding: 5px;
-      border: 1px solid #ddd;
-      border-radius: 9px;
-    }
+	.audioNote{
+		position: relative;
+		margin-bottom: 10px;
+		padding: 5px;
+		border: 1px solid #ddd;
+		border-radius: 9px;
+	}
 
     a.playControl{
       display: inline-block;
@@ -911,6 +913,11 @@
 
     a.playControl.stop{
       background-position: -28px 0px;
+    }
+
+    .removeAudioNote{
+    	top: 5px;
+    	right: 5px;
     }
     </style>
   </head>
