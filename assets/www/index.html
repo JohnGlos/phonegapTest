@@ -772,6 +772,7 @@
   }
 
   function removeSuccess(entry) {
+  	refreshAudio();
     console.log("Removal successful");
   }
 
@@ -915,9 +916,10 @@
       background-position: -28px 0px;
     }
 
-    .removeAudioNote{
+    a.removeAudioNote{
     	top: 5px;
     	right: 5px;
+    	color: #DD5447;
     }
     </style>
   </head>
