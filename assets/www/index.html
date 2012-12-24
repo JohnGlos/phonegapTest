@@ -132,87 +132,6 @@
 
 
 
-    /*
-    // Called when a photo is successfully retrieved
-    //
-    function onPhotoURISuccess(imageURI) {
-      // Uncomment to view the image file URI 
-      // console.log(imageURI);
-
-      // Get image handle
-      //
-      var largeImage = document.getElementById('largeImage');
-
-      // Unhide image elements
-      //
-      largeImage.style.display = 'block';
-
-      // Show the captured photo
-      // The inline CSS rules are used to resize the image
-      //
-      largeImage.src = imageURI;
-    }
-
-    // A button will call this function
-    //
-    function capturePhotoEdit() {
-      // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
-        destinationType: destinationType.DATA_URL });
-    }
-
-    // A button will call this function
-    //
-    function getPhoto(source) {
-      // Retrieve image file location from specified source
-      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-        destinationType: destinationType.FILE_URI,
-        sourceType: source });
-    }
-
-    // Called if something bad happens.
-    // 
-    function onFail(message) {
-      alert('Failed because: ' + message);
-    }
-    */
-
-
-
-
-
-
-
-    /*
-    // Show a custom alert
-    //
-    function showAlert() {
-        navigator.notification.alert(
-            'You are the winner!',  // message
-            'Game Over',            // title
-            'Done'                  // buttonName
-        );
-    }
-
-    // Beep three times
-    //
-    function playBeep() {
-        navigator.notification.beep(3);
-    }
-
-    // Vibrate for 2 seconds
-    //
-    function vibrate() {
-        navigator.notification.vibrate(2000);
-    }
-    */
-
-
-
-
-
-
-
     var monthsShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     var notificationTimer = setInterval(checkNotifications, 6000); //Every minute ------------------------------------------------------------------------------- 6 seconds?!
@@ -445,136 +364,6 @@
 
 
 
-    /*
-    function writeToFile() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
-
-    function gotFS(fileSystem) {
-    	alert('creating file in ' + fileSystem.root.name)
-        fileSystem.root.getFile("readme.txt", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-
-    function gotFileEntry(fileEntry) {
-        fileEntry.createWriter(gotFileWriter, fail);
-    }
-
-    function gotFileWriter(writer) {
-        writer.onwriteend = function(evt) {
-            alert("contents of file now 'some sample text'");
-        };
-        writer.write("some sample text");
-    }
-
-    function fail(error) {
-        alert(error.code);
-    }
-
-
-
-
-    function readFile() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS2, fail2);
-    }
-
-    function gotFS2(fileSystem) {
-        fileSystem.root.getFile("readme.txt", null, gotFileEntry2, fail2);
-    }
-
-    function gotFileEntry2(fileEntry) {
-        fileEntry.file(gotFile, fail2);
-    }
-
-    function gotFile(file){
-        readDataUrl(file);
-        readAsText(file);
-    }
-
-    function readDataUrl(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            alert("Read as data URL");
-            alert(evt.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function readAsText(file) {
-        var reader = new FileReader();
-        reader.onloadend = function(evt) {
-            alert("Read as text");
-            alert(evt.target.result);
-        };
-        reader.readAsText(file);
-    }
-    */
-
-    
-
-
-
-  /*
-  function accessRecordings(){
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS3, fail2);
-  }
-
-	function gotFS3(fileSystem) {
-		alert('FileSystem: ' + getObjProp(fileSystem) + ' fileSystem.root: ' + getObjProp(fileSystem.root));
-
-		fileSystem.root.getDirectory("My Documents/My Recordings", null, gotDir, fail2);
-	}
-
-	function gotDir(fileSystem){
-		alert('at gotDir()');
-
-		alert('FileSystem: ' + fileSystem + ' || fileSystem.root: ' + fileSystem.root + ' || fileSystem.name: ' + fileSystem.name + ' || fileSystem.fullPath: ' + fileSystem.fullPath);
-		
-		// Get a directory reader
-		var directoryReader = fileSystem.createReader();
-
-		// Get a list of all the entries in the directory
-		directoryReader.readEntries(dirReadSuccess,dirReadFail);
-	}
-
-	function dirReadSuccess(entries) {
-		alert('in dirReadSuccess()');
-
-    var recordings = '';
-		var i;
-		for (i=0; i<entries.length; i++) {
-      //alert(entries[i].name);
-			alert(entries[i].name + ' || Path: ' + entries[i].path + ' || fullPath: ' + entries[i].fullPath);
-      
-      recordings = recordings + '<button onclick="playSound(\'' + entries[i].fullPath + '\');">Play ' + entries[i].name + '</button><br/>';
-		}
-    $('#recordings').html(recordings);
-	}
-
-
-	function getObjProp(object){
-		for (i = 0, len = object.length; i < len; i += 1) {
-            var details;
-            var fieldContents;
-
-            for (var field in object) {
-              fieldContents = object[field];
-              if (typeof(fieldContents) == "function") {
-                fieldContents = "(function)";
-              }
-              details += "  " + field + ": " + fieldContents + "\n";
-            }
-        }
-        
-        return details;
-
-	}
-  */
-
-
-
-
-
-
   //Record Audio
     //
     function captureSuccess(mediaFiles) {
@@ -663,20 +452,6 @@
     function failMove(error) {
         alert('Move error: ' + error.code);
     }
-
-    /*
-    function gotDir(fileSystem){
-      alert('at gotDir()');
-
-      alert('FileSystem: ' + fileSystem + ' || fileSystem.root: ' + fileSystem.root + ' || fileSystem.name: ' + fileSystem.name + ' || fileSystem.fullPath: ' + fileSystem.fullPath);
-      
-      // Get a directory reader
-      var directoryReader = fileSystem.createReader();
-
-      // Get a list of all the entries in the directory
-      directoryReader.readEntries(dirReadSuccess,dirReadFail);
-    }
-  */
 
 
 
@@ -891,6 +666,7 @@
       display: inline-block;
       width: 28px;
       height: 28px;
+      margin-right: 10px;
       background-color: #45D285;
       text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
       font-size: 1.3em;
@@ -936,18 +712,10 @@
   		<a href="#cameraPage" data-role="button">Camera</a>
   		<a href="#audioPage" data-role="button">Audio</a>
   		<a href="#notificationsPage" data-role="button">Notifications</a>
-  		<!--<a href="#filePage" data-role="button">Files</a>-->
   	</div>
 
   	<div data-role="page" id="cameraPage">
 		<button onclick="capturePhoto();">Capture Photo</button> <br>
-    <!--
-		<button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
-		<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-		<button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
-		<img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
-		<img style="display:none;" id="largeImage" src="" />
-    -->
     <div id="noteImageGallery"></div>
 	</div>
 
@@ -958,35 +726,17 @@
 	</div>
 
 	<div data-role="page" id="notificationsPage">
-    <!--
-	  <p><a href="#" onclick="showAlert(); return false;">Show Alert</a></p>
-    <p><a href="#" onclick="playBeep(); return false;">Play Beep</a></p>
-    <p><a href="#" onclick="vibrate(); return false;">Vibrate</a></p>
-    <br/>
-    -->
-    <input type="text" id="notificationText" placeholder="Notification message"/>
-    <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
-    <label for="notificationDate">Date</label>
-    <input type="date" id="notificationDate" placeholder="YYYY-MM-DD" onfocus="notificationDateFocus()"/>
-    <label for="notificationTime">Time</label>
-    <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
-    <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
-    <div id="setNotifications">
-      
-    </div>
+	    <input type="text" id="notificationText" placeholder="Notification message"/>
+	    <div id="notificationTextError">Sorry, the ">" character cannot be used in a notification message</div>
+	    <label for="notificationDate">Date</label>
+	    <input type="date" id="notificationDate" placeholder="YYYY-MM-DD" onfocus="notificationDateFocus()"/>
+	    <label for="notificationTime">Time</label>
+	    <input type="time" id="notificationTime" placeholder="HH:MM" onfocus="notificationTimeFocus()"/>
+	    <a data-role="button" href="javascript:void(0);" onclick="createNotification()">Create</a>
+	    <div id="setNotifications">
+	      
+	    </div>
 	</div>
-
-  <!--
-	<div data-role="page" id="filePage">
-		<p><a href="#" onclick="writeToFile()">Write to File</a></p>
-		<p><a href="#" onclick="readFile()">Read File</a></p>
-		<p><a href="#" onclick="accessRecordings()">Access My Recordings Folder</a></p>
-    <p id="recordings">
-
-    </p>
-    
-	</div>
-  -->
 
 	<div data-role="page" id="template">
 	</div>
