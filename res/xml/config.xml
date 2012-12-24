@@ -33,6 +33,8 @@
     <preference name="useBrowserHistory" value="true" />
     <preference name="exit-on-suspend" value="false" />
 
+    <preference name="splash-screen-duration" value="10000" />
+
     <gap:splash src="res/drawable-ldpi/splash.png" gap:platform="android" gap:density="ldpi" />
     <gap:splash src="res/drawable-mdpi/splash.png" gap:platform="android" gap:density="mdpi" />
     <gap:splash src="res/drawable-hdpi/splash.png" gap:platform="android" gap:density="hdpi" />
