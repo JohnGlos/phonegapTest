@@ -756,7 +756,27 @@
 
   function removeAudioNote(url){
     alert('remove ' + url);
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
+      alert('In ' + fileSystem.root.fullPath);
+      alert('Gettings file at ' + url);
+
+      fileSystem.root.getFile(url, null, function(fileEntry){
+        alert('got file ' + fileEntry.fullPath);
+
+        fileEntry.remove(removeSuccess, removeFail);
+
+      }, function(error){alert('error'); alert('get file error: ' + error.code);});
+
+    }, fail2);
   }
+
+  function removeSuccess(entry) {
+    console.log("Removal successful");
+  }
+
+	function removeFail(error) {
+		alert('Error removing file: ' + error.code);
+	}
 
     </script>
     <style type="text/css">
@@ -858,7 +878,6 @@
 
 
     .audioNote{
-      position: relative;
       margin-bottom: 10px;
       padding: 5px;
       border: 1px solid #ddd;
@@ -869,14 +888,13 @@
       display: inline-block;
       width: 28px;
       height: 28px;
-      margin-right: 10px;
       background-color: #45D285;
       text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
       font-size: 1.3em;
       color: #666;
       text-decoration: none;
       border-radius: 9px;
-      background-image:url('playStop.png');
+      background-image:url('images/playStop.png');
 
       -webkit-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
       -moz-box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.07);
@@ -893,18 +911,6 @@
 
     a.playControl.stop{
       background-position: -28px 0px;
-    }
-
-    .removeAudioNote.ui-link{
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      text-decoration: none;
-      color: #ddd;
-    }
-
-    .removeAudioNote.ui-link:hover{
-      color: #DD5447;
     }
     </style>
   </head>
